@@ -28,7 +28,7 @@ class TwitchDirectoriesPage:
         directories_lookup = []
         for link in directory_search_web_elements:
             directories_lookup.append(f"{link.text}")
-        test_directories = ["gaming", "irl", "esports", "creative", "TEST_FAILURE_1", "Musich"]
+        test_directories = ["gaming", "irl", "esports", "creative", "TEST_FAILURE_1"]
         # Compare the 2 lists, making sure we have the same amount to test
         if len(directories_lookup) != len(test_directories):
             # Output the 2 lists if they are different lengths, something in script needs updating
