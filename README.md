@@ -10,4 +10,4 @@ It checks for any failed routes e.g clicking the gaming button didnt take me to 
 
 It prints out the following at run time.
 
-![Example of running the tests](https://ibb.co/DQXpYHH)
+<a href="https://ibb.co/DQXpYHH"><img src="https://i.ibb.co/Wf9t044/twitch-automation.png" alt="twitch-automation" border="0"></a>
