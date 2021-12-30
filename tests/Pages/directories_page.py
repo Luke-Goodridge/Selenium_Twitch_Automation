@@ -28,6 +28,7 @@ class TwitchDirectoriesPage:
         directories_lookup = []
         for link in directory_search_web_elements:
             directories_lookup.append(f"{link.text}")
+        # TODO remove this failure.
         test_directories = ["gaming", "irl", "esports", "creative", "TEST_FAILURE_1"]
         # Compare the 2 lists, making sure we have the same amount to test
         if len(directories_lookup) != len(test_directories):
@@ -36,11 +37,11 @@ class TwitchDirectoriesPage:
                                f"\n{str(len(directories_lookup))} directories on page. {str(directories_lookup)}"
                                f"\n{str(len(test_directories))} scripted to test {str(test_directories)}", False)
         for directory in test_directories:
-            # Find the link to each directory
             try:
+                # Find the link to each directory
                 self.wait.until(EC.presence_of_element_located(
                     (By.XPATH, f'//a[contains(@href,"/directory/{directory}")]'))).click()
-            # If there is no link, the data must be wrong, normally this would stack trace etc, but for this purpose 
+            # If there is no link, the data must be wrong, normally this would stack trace etc. But for this purpose
             # its fine to fail the test 
             except TimeoutException as ex:
                 test_counter_print(f"Navigation button to {directory} directory page could not be found", False)
