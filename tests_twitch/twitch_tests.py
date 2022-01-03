@@ -1,22 +1,23 @@
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
 from Pages.home_page import TwitchHomePage
-from Pages.directories_page import TwitchDirectoriesPage
+from Pages.directory.directories_main import TwitchDirectoriesMain
+
 
 # Chrome
+
 CHROME_PATH = r"C:/Program Files (x86)/chromedriver.exe"
 driver = webdriver.Chrome(executable_path=CHROME_PATH)
 homePage = TwitchHomePage(driver)
-browsePage = TwitchDirectoriesPage(driver)
+browsePage = TwitchDirectoriesMain(driver)
 browsePage.goto()
 
 # ======== Tests =========
 
 # Test recommended
-browsePage.test_change_view_mode(0)
+browsePage.change_view_mode(0)
 browsePage.test_print_viewcount_details()
 # Test viewers high to low
-browsePage.test_change_view_mode(1)
+browsePage.change_view_mode(1)
 browsePage.test_print_viewcount_details()
 
 # browsePage.test_all_directories()

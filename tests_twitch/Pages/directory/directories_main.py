@@ -2,14 +2,12 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from .home_page import test_counter_print
+from ..home_page import test_counter_print
+from .directories_page import TwitchDirectoryPage
 import time
 
 
-class TwitchDirectoriesPage:
-    def __init__(self, driver):
-        self._driver = driver
-        self.wait = WebDriverWait(self._driver, 2)
+class TwitchDirectoriesMain(TwitchDirectoryPage):
 
     # Return to the directories' page via the "browse_button"
     def goto(self):
@@ -24,8 +22,8 @@ class TwitchDirectoriesPage:
     # Ensures all directories can be navigated to
     def test_all_directories(self):
         # Lookup how many directories there should be on the page
-        directory_search_web_elements = self._driver.find_elements_by_class_name(
-            'vertical-selector__title--big--creative')
+        directory_search_web_elements = self._driver.find_elements(By.CLASS_NAME,'vertical-selector__title--big'
+                                                                                 '--creative')
         directories_lookup = []
         for link in directory_search_web_elements:
             directories_lookup.append(f"{link.text}")
@@ -60,20 +58,10 @@ class TwitchDirectoriesPage:
         # Assume when running this that we are on the directories page
         time.sleep(2)
         view_status_element = self._driver.find_element(By.XPATH, "//button[@data-a-target='browse-sort-menu']")
-        viewcount_elements = self._driver.find_elements_by_class_name('tw-card-body')
+        viewcount_elements = self._driver.find_elements(By.CLASS_NAME,'tw-card-body')
         for viewcount in viewcount_elements:
-            title = viewcount.find_element_by_tag_name('h2').text
-            view_count = viewcount.find_elements_by_tag_name('a')[1].text
+            title = viewcount.find_element(By.TAG_NAME, 'h2').text
+            view_count = viewcount.find_elements(By.TAG_NAME, 'a')[1].text
             print(f"{view_count} for {title}")
         print(f"View is in '{view_status_element.text}' view mode")
         # TODO - add in verfication that the order is correct.
-
-    # Change view on the directories page, e.g recommended, by viewcount etc.
-    def test_change_view_mode(self, mode):
-        view_status_dropdown = self._driver.find_element(By.XPATH, "//button[@data-a-target='browse-sort-menu']")
-        view_status_dropdown.click()
-        view_modes = self._driver.find_elements(By.CLASS_NAME, 'dgcGVJ')
-        if mode == 0:
-            view_modes[0].click()
-        else:
-            view_modes[1].click()
