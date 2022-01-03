@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from .home_page import test_counter_print
+import time
 
 
 class TwitchDirectoriesPage:
@@ -11,7 +12,7 @@ class TwitchDirectoriesPage:
         self.wait = WebDriverWait(self._driver, 2)
 
     # Return to the directories' page via the "browse_button"
-    def goto_directories_hub(self):
+    def goto(self):
         current_page = self._driver.current_url
         self.wait.until(EC.presence_of_element_located((By.XPATH, "//a[@data-a-target='browse-link']"))).click()
         # Verify that we are at the browse page
@@ -52,5 +53,27 @@ class TwitchDirectoriesPage:
                 test_counter_print(f"Could not navigate to {directory} directory page from the {directory} button",
                                    False)
             # Return to the directories home page
-            self.goto_directories_hub()
+            self.goto()
         self._driver.quit()
+
+    def test_print_viewcount_details(self):
+        # Assume when running this that we are on the directories page
+        time.sleep(2)
+        view_status_element = self._driver.find_element(By.XPATH, "//button[@data-a-target='browse-sort-menu']")
+        viewcount_elements = self._driver.find_elements_by_class_name('tw-card-body')
+        for viewcount in viewcount_elements:
+            title = viewcount.find_element_by_tag_name('h2').text
+            view_count = viewcount.find_elements_by_tag_name('a')[1].text
+            print(f"{view_count} for {title}")
+        print(f"View is in '{view_status_element.text}' view mode")
+        # TODO - add in verfication that the order is correct.
+
+    # Change view on the directories page, e.g recommended, by viewcount etc.
+    def test_change_view_mode(self, mode):
+        view_status_dropdown = self._driver.find_element(By.XPATH, "//button[@data-a-target='browse-sort-menu']")
+        view_status_dropdown.click()
+        view_modes = self._driver.find_elements(By.CLASS_NAME, 'dgcGVJ')
+        if mode == 0:
+            view_modes[0].click()
+        else:
+            view_modes[1].click()
